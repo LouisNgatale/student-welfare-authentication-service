@@ -6,6 +6,7 @@ import com.louisngatale.authenticationservice.services.TokenProvider;
 import com.louisngatale.authenticationservice.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,8 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/api/login")
 public class AuthenticationController {
     @Autowired
     public AuthenticationManager authenticationManager;
@@ -26,11 +28,6 @@ public class AuthenticationController {
 
     @Autowired
     private TokenProvider jwtUtil;
-
-    @RequestMapping(method = RequestMethod.GET, value = "/hello")
-    public String test(){
-        return "hello";
-    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/authenticate")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {

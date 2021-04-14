@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,7 +31,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
-        auth.authenticationProvider(authProvider());
+        auth.userDetailsService(myUserDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -53,14 +53,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return NoOpPasswordEncoder.getInstance();
     }
 */
-   @Bean
-   public DaoAuthenticationProvider authProvider() {
-       DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-       authProvider.setUserDetailsService(myUserDetailsService);
-       authProvider.setPasswordEncoder(passwordEncoder());
-       return authProvider;
-   }
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
