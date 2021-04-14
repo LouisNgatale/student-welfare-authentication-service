@@ -15,6 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.session.SessionManagementFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 
 @Configuration
@@ -37,7 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .csrf().disable()
                 .authorizeRequests().antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
     }
@@ -53,6 +58,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return NoOpPasswordEncoder.getInstance();
     }
 */
+
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
