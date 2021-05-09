@@ -25,11 +25,16 @@ public class AppUserDetails implements UserDetails {
     public AppUserDetails() {
     }
 
-
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Set<SimpleGrantedAuthority> getAuthorities() {
         return authorities;
     }
+
+    //
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return authorities;
+//    }
 
     @Override
     public String getPassword() {

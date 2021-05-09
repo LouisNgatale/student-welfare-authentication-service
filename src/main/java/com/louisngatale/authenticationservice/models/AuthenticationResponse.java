@@ -1,15 +1,14 @@
 package com.louisngatale.authenticationservice.models;
 
-import com.louisngatale.authenticationservice.entities.Roles;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class AuthenticationResponse {
     private String jwt;
     private String fullName;
     private String username;
-    private String roles ;
+    private Set<SimpleGrantedAuthority> roles ;
 
     public String getFullName() {
         return fullName;
@@ -19,15 +18,15 @@ public class AuthenticationResponse {
         this.fullName = fullName;
     }
 
-    public String getRoles() {
+    public Set<SimpleGrantedAuthority> getRoles() {
         return roles;
     }
 
-    public void setRoles(String roles) {
+    public void setRoles(Set<SimpleGrantedAuthority> roles) {
         this.roles = roles;
     }
 
-    public AuthenticationResponse(String jwt, String fullName, String username, String roles) {
+    public AuthenticationResponse(String jwt, String fullName, String username, Set<SimpleGrantedAuthority> roles) {
         this.jwt = jwt;
         this.fullName = fullName;
         this.username = username;

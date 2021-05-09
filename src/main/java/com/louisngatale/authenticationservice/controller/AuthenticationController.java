@@ -1,5 +1,6 @@
 package com.louisngatale.authenticationservice.controller;
 
+import com.louisngatale.authenticationservice.entities.AppUserDetails;
 import com.louisngatale.authenticationservice.entities.Roles;
 import com.louisngatale.authenticationservice.entities.User;
 import com.louisngatale.authenticationservice.models.AuthenticationRequest;
@@ -17,13 +18,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -57,7 +58,12 @@ public class AuthenticationController {
                  final String jwt = jwtUtil.generateToken(authentication);
 
                  Optional<User> userDetails = userRepository.findByloginId(authenticationRequest.getUsername());
+                 userDetails.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+                 AppUserDetails app =  userDetails.map(AppUserDetails::new).get();
+
+                 Set<SimpleGrantedAuthority> roles = new HashSet<>();
+                 roles = app.getAuthorities();
                  String userName = userDetails
                          .get()
                          .getFullName();
@@ -66,7 +72,7 @@ public class AuthenticationController {
                          .map(GrantedAuthority::getAuthority)
                          .collect(Collectors.joining(","));
 
-                 return ResponseEntity.ok(new AuthenticationResponse(jwt,userName,authentication.getName(),authorities));
+                 return ResponseEntity.ok(new AuthenticationResponse(jwt,userName,authentication.getName(),roles));
              }catch (Exception e){
                  System.out.println(e.getMessage());
                  throw new IllegalStateException(e);
